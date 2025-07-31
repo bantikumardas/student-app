@@ -1,14 +1,28 @@
 package com.student.studentapp.Entity;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+
 @Entity
 @Table(name = "student")
 public class Student {
-    @id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "Name is mandatory")
     private String name;
+
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email should be valid")
     private String email;
+
+    @NotBlank(message = "Grade is mandatory")
     private String grade;
+
+    @NotBlank(message = "Roll number is mandatory")
     private String rollNumber;
 
     public Long getId() {

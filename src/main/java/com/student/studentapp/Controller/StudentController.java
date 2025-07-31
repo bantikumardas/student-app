@@ -3,6 +3,7 @@ package com.student.studentapp.Controller;
 import com.student.studentapp.Entity.Student;
 import com.student.studentapp.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping("/create")
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<?> createStudent(@RequestBody Student student) {
         return studentService.createStudent(student);
     }
 
@@ -23,7 +24,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<?> getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id);
     }
 }

@@ -38,7 +38,7 @@ public class StudentControllerTest {
         mockMvc.perform(post("/student/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(student)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name").value("Alice"))
                 .andExpect(jsonPath("$.email").value("alice@example.com"))
@@ -90,10 +90,10 @@ public class StudentControllerTest {
     @Test
     @DisplayName("Negative: Get Student by Invalid ID")
     void testGetStudentById_Negative() throws Exception {
-        // This testcase is to check the sudent is not found by invaid id
+        // This testcase is to check the student is not found by invalid id
         mockMvc.perform(get("/student/999999"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("")); // Should return empty or null
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.id").value("Student not found"));
     }
 
     @Test
@@ -102,12 +102,14 @@ public class StudentControllerTest {
         Student student = new Student();
         student.setEmail("noName@example.com");
         // Missing name, grade, rollNumber
-        // This testcase is to check the student is
+        // This testcase is to check the student is not created when required fields are missing
         mockMvc.perform(post("/student/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(student)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").doesNotExist());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.name").value("Name is mandatory"))
+                .andExpect(jsonPath("$.grade").value("Grade is mandatory"))
+                .andExpect(jsonPath("$.rollNumber").value("Roll number is mandatory"));
     }
 
     @Test
